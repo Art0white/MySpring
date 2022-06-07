@@ -1,5 +1,6 @@
 package com.lovsog;
 
+import com.lovsog.service.UserService;
 import com.spring.MyApplicationContext;
 
 /**
@@ -11,9 +12,7 @@ public class Text {
         MyApplicationContext applicationContext = new MyApplicationContext(AppConfig.class);
 
         // Object userService = applicationContext.getBean("userService");     // map <beanName, bean对象>  <---单例池
-        System.out.println(applicationContext.getBean("userService"));
-        System.out.println(applicationContext.getBean("userService"));
-        System.out.println(applicationContext.getBean("userService"));
-
+        UserService userService = (UserService) applicationContext.getBean("userService");
+        userService.text();
     }
 }
