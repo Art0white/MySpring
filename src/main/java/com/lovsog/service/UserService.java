@@ -1,5 +1,6 @@
 package com.lovsog.service;
 
+import com.spring.Autowired;
 import com.spring.Component;
 import com.spring.Scope;
 
@@ -10,5 +11,12 @@ import com.spring.Scope;
 @Component("userService")
 @Scope("prototype")
 public class UserService {
+
+    @Autowired
+    private OrderService orderService;
+
+    public void text(){
+        System.out.println(orderService);
+    }
 
 }
