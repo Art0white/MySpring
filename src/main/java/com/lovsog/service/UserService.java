@@ -1,9 +1,6 @@
 package com.lovsog.service;
 
-import com.spring.Autowired;
-import com.spring.BeanNameAware;
-import com.spring.Component;
-import com.spring.Scope;
+import com.spring.*;
 
 /**
  * @author Lovsog
@@ -11,11 +8,16 @@ import com.spring.Scope;
  **/
 @Component("userService")
 @Scope("prototype")
-public class UserService implements BeanNameAware {
+public class UserService implements BeanNameAware, InitializingBean {
 
     @Autowired
     private OrderService orderService;
     private String beanName;
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("初始化");
+    }
 
     @Override
     public void setBeanName(String name) {
@@ -26,6 +28,4 @@ public class UserService implements BeanNameAware {
         System.out.println(orderService);
         System.out.println(beanName);
     }
-
-
 }
