@@ -4,6 +4,8 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -12,11 +14,12 @@ import java.util.concurrent.ConcurrentHashMap;
  * 2022/6/5
  * 容器类
  **/
+
 public class MyApplicationContext {
     private Class configClass;
     private ConcurrentHashMap<String, Object> singletonObjects = new ConcurrentHashMap<>(); // 单例池
     private ConcurrentHashMap<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(); // bean池
-
+    private List<BeanPostProcessor> beanPostProcessorList = new ArrayList<>();
     public MyApplicationContext(Class configClass) {
         this.configClass = configClass;
 
@@ -55,6 +58,11 @@ public class MyApplicationContext {
                 ((BeanNameAware)instance).setBeanName(beanName);
             }
 
+            // 初始化前操作(BeanPostProcessor实现)
+            for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
+                instance = beanPostProcessor.postProcessBeforeInitialization(instance, beanName);
+            }
+
             // 初始化
             if (instance instanceof InitializingBean) {
                 try {
@@ -63,6 +71,20 @@ public class MyApplicationContext {
                     e.printStackTrace();
                 }
             }
+
+            // 初始化后操作(BeanPostProcessor实现)
+            for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
+                instance = beanPostProcessor.postProcessAfterInitialization(instance, beanName);
+            }
+
+            // BeanPostProcessor(Bean的后置处理器)
+            // 初始化前操作 方法
+            // 初始化后操作 方法
+            // 子接口之一：InstantiationAwareBeanPostProcessor
+            //              实例化前操作 方法
+            //              实例化后操作 方法
+            //              属性赋值后操作 方法
+
 
             return instance;
         } catch (InstantiationException e) {
@@ -112,6 +134,12 @@ public class MyApplicationContext {
                             //          解析出一个类 ---> BeanDefinition
                             // BeanDefinition
 
+                            // 判断当前类有没有实现BeanPostProcessor类
+                            if (BeanPostProcessor.class.isAssignableFrom(clazz)) {
+                                BeanPostProcessor instance = (BeanPostProcessor) clazz.getDeclaredConstructor().newInstance();
+                                beanPostProcessorList.add(instance);
+                            }
+
                             Component componentAnnotation = clazz.getDeclaredAnnotation(Component.class);
                             String beanName = componentAnnotation.value();
 
@@ -129,6 +157,14 @@ public class MyApplicationContext {
 
                         }
                     } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (NoSuchMethodException e) {
                         e.printStackTrace();
                     }
                 }
