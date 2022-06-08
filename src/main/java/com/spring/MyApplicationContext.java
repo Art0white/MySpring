@@ -28,14 +28,14 @@ public class MyApplicationContext {
             String beanName = entry.getKey();
             BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
             if (beanDefinition.getScope().equals("singleton")) {
-                Object bean = createBean(beanDefinition); // 单例Bean
+                Object bean = createBean(beanName, beanDefinition); // 单例Bean
                 singletonObjects.put(beanName, bean);
             }
         }
 
     }
 
-    public Object createBean(BeanDefinition beanDefinition) {
+    public Object createBean(String beanName, BeanDefinition beanDefinition) {
 
         Class clazz = beanDefinition.getClazz();
         try {
@@ -50,6 +50,9 @@ public class MyApplicationContext {
                 }
             }
 
+            if (instance instanceof BeanNameAware) {
+                ((BeanNameAware)instance).setBeanName(beanName);
+            }
 
             return instance;
         } catch (InstantiationException e) {
@@ -130,7 +133,7 @@ public class MyApplicationContext {
                 return o;
             } else {
                 // 创建Bean对象
-                Object bean = createBean(beanDefinition);
+                Object bean = createBean(beanName, beanDefinition);
                 return bean;
             }
         } else {
