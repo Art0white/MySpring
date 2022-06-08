@@ -13,6 +13,11 @@ public class UserService implements BeanNameAware, InitializingBean {
     @Autowired
     private OrderService orderService;
     private String beanName;
+    private String name;
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -27,5 +32,6 @@ public class UserService implements BeanNameAware, InitializingBean {
     public void text(){
         System.out.println(orderService);
         System.out.println(beanName);
+        System.out.println(name);
     }
 }
