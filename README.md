@@ -4,3 +4,4 @@
 2. Spring 启动与扫描解析的模拟实现
 3. Spring 完善扫描解析
 4. Spring 依赖注入
+5. Spring Aware回调实现
