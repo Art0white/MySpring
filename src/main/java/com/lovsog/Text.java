@@ -1,6 +1,7 @@
 package com.lovsog;
 
 import com.lovsog.service.UserService;
+import com.spring.Autowired;
 import com.spring.MyApplicationContext;
 
 /**
