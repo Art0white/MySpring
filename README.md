@@ -5,3 +5,4 @@
 3. Spring 完善扫描解析
 4. Spring 依赖注入
 5. Spring Aware回调实现
+6. Spring 初始化机制实现
