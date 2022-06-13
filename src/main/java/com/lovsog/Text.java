@@ -1,5 +1,6 @@
 package com.lovsog;
 
+import com.lovsog.service.UserInterface;
 import com.lovsog.service.UserService;
 import com.spring.Autowired;
 import com.spring.MyApplicationContext;
@@ -13,7 +14,7 @@ public class Text {
         MyApplicationContext applicationContext = new MyApplicationContext(AppConfig.class);
 
         // Object userService = applicationContext.getBean("userService");     // map <beanName, bean对象>  <---单例池
-        UserService userService = (UserService) applicationContext.getBean("userService");
-        userService.text();
+        UserInterface userService = (UserInterface) applicationContext.getBean("userService");
+        userService.test(); // 1. 执行代理逻辑    2. 业务test
     }
 }
