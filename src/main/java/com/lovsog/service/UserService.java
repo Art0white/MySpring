@@ -8,7 +8,7 @@ import com.spring.*;
  **/
 @Component("userService")
 @Scope("prototype")
-public class UserService implements BeanNameAware, InitializingBean {
+public class UserService implements BeanNameAware, InitializingBean, UserInterface {
 
     @Autowired
     private OrderService orderService;
@@ -29,7 +29,7 @@ public class UserService implements BeanNameAware, InitializingBean {
         beanName = name;
     }
 
-    public void text(){
+    public void test(){
         System.out.println(orderService);
         System.out.println(beanName);
         System.out.println(name);
